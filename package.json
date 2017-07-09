@@ -1,15 +1,19 @@
 {
-  "name": "moz",
+  "name": "tabi",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "http-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "test": "nodemon app.js"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "phaser": "^2.6.2"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.3"
   }
 }
