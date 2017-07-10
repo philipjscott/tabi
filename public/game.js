@@ -8,6 +8,9 @@ function preload() {
   game.load.image('boulder', 'assets/sprites/boulder.png');
   game.load.audio('music', 'assets/audio/music.mp3');
   game.load.audio('death', 'assets/audio/death.mp3');
+
+  // make the game continue to run on lose focus
+  game.stage.disableVisibilityChange = true;
 }
 
 var multi = false;
@@ -16,7 +19,6 @@ var rival;
 var boulders;
 var cursors;
 var jumpButton;
-var firingTimer = 0;
 var facing = 'left';
 var score = 0;
 var bestScore = 0;
@@ -27,6 +29,7 @@ var replayTimer = 0;
 var scoreText;
 var music;
 var deathSfx;
+var ready = false;
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -78,6 +81,8 @@ function create() {
   // buttons
   cursors = game.input.keyboard.createCursorKeys();
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+  ready = true;
 }
 
 function update() {
@@ -107,11 +112,6 @@ function update() {
     }
   }
 
-  // boulder generation
-  if (game.time.now > firingTimer) {
-    generateBoulder();
-  }
-
   // set score
   score = (game.time.now - startTime) / 1000;
   scoreText.text = 'time: ' + score;
@@ -129,13 +129,12 @@ function update() {
   game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
 }
 
-function generateBoulder() {
-  var boulder = boulders.create(Math.random() * 600 / 5, 0, 'boulder');
+function generateBoulder(x, velocity, angularVelocity) {
+  var boulder = boulders.create(x, 0, 'boulder');
   boulder.smoothed = false;
-  boulder.body.velocity.x = Math.random() * 100 - 50;
+  boulder.body.velocity.x = velocity;
   boulder.anchor.setTo(0.5,0.5);
-  boulder.body.angularVelocity = Math.random() * 1000 - 500;
-  firingTimer = game.time.now + 500;
+  boulder.body.angularVelocity = angularVelocity;
 }
 
 function boulderHitsPlayer() {
@@ -159,3 +158,11 @@ socket.on('player connect', function() {
   console.log('multi ON');
   multi = true;
 });
+
+socket.on('create boulder', function(data) {
+  if (ready) {
+    generateBoulder(data.x, data.velocity, data.angularVelocity);
+  }
+});
+
+

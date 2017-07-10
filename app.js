@@ -16,6 +16,10 @@ io.on('connection', function(socket) {
   });
 });
 
+setInterval(function() {
+  io.sockets.emit('create boulder', new Boulder());
+}, 500);
+
 app.use(express.static('public'));
 
 setInterval(function() {
@@ -29,3 +33,9 @@ var port = process.env.PORT || 8080;
 server.listen(port, function() {
   console.log('listening!');
 });
+
+function Boulder() {
+  this.x = Math.random() * 600 / 5;
+  this.velocity = Math.random() * 100 - 50;
+  this.angularVelocity = Math.random() * 1000 - 500;
+}
