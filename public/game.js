@@ -9,24 +9,25 @@ var player;
 var boulders;
 var cursors;
 var jumpButton;
-var facing = 'left'
+var firingTimer = 0;
+var facing = 'left';
+var lifeText;
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
-  game.physics.arcade.gravity.y = 400;
+  game.physics.arcade.gravity.y = 300;
   game.stage.backgroundColor = '#ffffff';
 
   // add srpites
-  player = game.add.sprite(100, 100, 'ninja');
+  player = game.add.sprite(300, 430, 'ninja');
   boulders = game.add.group();
 
   // boulder config
-  game.physics.enable(boulders, Phaser.Physics.ARCADE);
-  boulders.createMultiple(30, 'boulder');
   boulders.setAll('outOfBoundsKill', true);
   boulders.setAll('checkWorldBounds', true);
-  boulders.scale.setTo(3, 3);
-  boulders.smoothed = false;
+  boulders.enableBody = true;
+  boulders.physicsBodyType = Phaser.Physics.ARCADE;
+  boulders.scale.setTo(5, 5);
   
   // player config
   game.physics.enable(player, Phaser.Physics.ARCADE);
@@ -38,6 +39,9 @@ function create() {
   player.scale.setTo(3, 3);
   player.smoothed = false;
 
+  lifeText = game.add.text(30, 30, 'Alive', {font: '30px Helvetica', fill: '#000000', align: 'left'});
+
+  // buttons
   cursors = game.input.keyboard.createCursorKeys();
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 }
@@ -45,8 +49,10 @@ function create() {
 function update() {
   player.body.velocity.x = 0;
 
-  if (jumpButton.isDown) {
-    //player.body.velocity.y = -200;
+  // jumping
+  if (jumpButton.isDown &&
+      player.body.onFloor()) {
+    player.body.velocity.y = -200;
   }
 
   // left / right controls
@@ -66,7 +72,26 @@ function update() {
       player.animations.play('idleRight');
     }
   }
+
+  // boulder generation
+  if (game.time.now > firingTimer) {
+    generateBoulder();
+  }
+
+  game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
 }
 
-function render() {
+function generateBoulder() {
+  var boulder = boulders.create(Math.random() * 600 / 5, 0, 'boulder');
+  boulder.smoothed = false;
+  boulder.body.velocity.x = Math.random() * 100 - 50;
+  boulder.anchor.setTo(0.5,0.5);
+  boulder.body.angularVelocity = Math.random() * 1000 - 500;
+  firingTimer = game.time.now + 500;
 }
+
+function boulderHitsPlayer() {
+  lifeText.text = 'Dead';
+}
+
+function render() {}
