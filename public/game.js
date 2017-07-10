@@ -3,6 +3,7 @@ var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', {preload : preload, cr
 function preload() {
   game.load.spritesheet('ninja', 'assets/ninja.png', 13, 15);
   game.load.image('boulder', 'assets/boulder.png');
+  game.load.audio('music', 'assets/music.mp3');
 }
 
 var player;
@@ -17,6 +18,7 @@ var startTime = 0;
 var lifeText;
 var deaths = 0;
 var scoreText;
+var music;
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -44,8 +46,13 @@ function create() {
   player.scale.setTo(3, 3);
   player.smoothed = false;
 
+  // game text
   lifeText = game.add.text(30, 30, deaths + ' deaths', {font: '30px Helvetica', fill: '#000000', align: 'left'});
   scoreText = game.add.text(30, 60, '', {font: '30px Helvetica', fill: '#000000', align: 'left'});
+
+  // music
+  music = game.add.audio('music');
+  music.play();
 
   // buttons
   cursors = game.input.keyboard.createCursorKeys();
