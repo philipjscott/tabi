@@ -11,7 +11,12 @@ var cursors;
 var jumpButton;
 var firingTimer = 0;
 var facing = 'left';
+var score = 0;
+var bestScore = 0;
+var startTime = 0;
 var lifeText;
+var deaths = 0;
+var scoreText;
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -39,7 +44,8 @@ function create() {
   player.scale.setTo(3, 3);
   player.smoothed = false;
 
-  lifeText = game.add.text(30, 30, 'Alive', {font: '30px Helvetica', fill: '#000000', align: 'left'});
+  lifeText = game.add.text(30, 30, deaths + ' deaths', {font: '30px Helvetica', fill: '#000000', align: 'left'});
+  scoreText = game.add.text(30, 60, '', {font: '30px Helvetica', fill: '#000000', align: 'left'});
 
   // buttons
   cursors = game.input.keyboard.createCursorKeys();
@@ -78,6 +84,10 @@ function update() {
     generateBoulder();
   }
 
+  //set score
+  score = game.time.now - startTime;
+  scoreText.text = 'time: ' + score;
+
   game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
 }
 
@@ -91,7 +101,13 @@ function generateBoulder() {
 }
 
 function boulderHitsPlayer() {
-  lifeText.text = 'Dead';
+  deaths++;
+  if (score > bestScore) {
+    bestScore = score;
+  }
+  score = 0;
+  startTime = game.time.now;
+  lifeText.text = deaths + ' deaths. best time: ' + bestScore;
 }
 
 function render() {}
