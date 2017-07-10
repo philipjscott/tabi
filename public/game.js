@@ -1,13 +1,18 @@
+var socket = io();
+
 var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', {preload : preload, create: create, update: update, render: render });
 
 function preload() {
   game.load.spritesheet('ninja', 'assets/sprites/ninja.png', 13, 15);
+  game.load.spritesheet('rival', 'assets/sprites/rival.png', 13, 15);
   game.load.image('boulder', 'assets/sprites/boulder.png');
   game.load.audio('music', 'assets/audio/music.mp3');
   game.load.audio('death', 'assets/audio/death.mp3');
 }
 
+var multi = false;
 var player;
+var rival;
 var boulders;
 var cursors;
 var jumpButton;
@@ -29,6 +34,7 @@ function create() {
   game.stage.backgroundColor = '#ffffff';
 
   // add srpites
+  rival = game.add.sprite(300, 430, 'rival');
   player = game.add.sprite(300, 430, 'ninja');
   boulders = game.add.group();
 
@@ -48,6 +54,16 @@ function create() {
   player.animations.add('idleLeft', [12, 13], 1, true);
   player.scale.setTo(3, 3);
   player.smoothed = false;
+
+  // rival config
+  game.physics.enable(rival, Phaser.Physics.ARCADE);
+  rival.body.collideWorldBounds = true;
+  rival.animations.add('right', [0,1,2,3,4], 10, true);
+  rival.animations.add('left', [5,6,7,8,9], 10, true);
+  rival.animations.add('idleRight', [10, 11], 1, true);
+  rival.animations.add('idleLeft', [12, 13], 1, true);
+  rival.scale.setTo(3, 3);
+  rival.smoothed = false;
 
   // game text
   lifeText = game.add.text(20, 20, deaths + ' deaths', {font: '20px Helvetica', fill: '#000000', align: 'left'});
@@ -96,9 +112,19 @@ function update() {
     generateBoulder();
   }
 
-  //set score
+  // set score
   score = (game.time.now - startTime) / 1000;
   scoreText.text = 'time: ' + score;
+  // multiplayer handler
+  if (multi) {
+    var myData = {x: player.body.x, y: player.body.y};
+    //console.log(myData);
+    socket.emit('update server', myData);
+    socket.on('update client', function(data) {
+      rival.position.x = data.x;
+      rival.position.y = data.y;
+    });
+  }
 
   game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
 }
@@ -127,3 +153,9 @@ function boulderHitsPlayer() {
 }
 
 function render() {}
+
+// toggle multiplayer on connection
+socket.on('player connect', function() {
+  console.log('multi ON');
+  multi = true;
+});

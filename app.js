@@ -10,8 +10,9 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-  socket.on('change', function(data) {
-    socket.broadcast.emit('change', data);
+  socket.emit('player connect');
+  socket.on('update server', function(data) {
+    socket.broadcast.emit('update client', data);
   });
 });
 
