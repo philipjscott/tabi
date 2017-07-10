@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var http = require('http');
-var server = http.Server(app);
+var server = http.createServer(app);
 var io = require('socket.io')(server);
 var active = false;
 
@@ -24,7 +24,7 @@ setInterval(function() {
   }
 }, 1000 * 60 * 29);
 
-var port = process.env.PORT | 8080;
+var port = process.env.PORT || 8080;
 server.listen(port, function() {
   console.log('listening!');
 });
