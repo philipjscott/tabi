@@ -1,9 +1,10 @@
 var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', {preload : preload, create: create, update: update, render: render });
 
 function preload() {
-  game.load.spritesheet('ninja', 'assets/ninja.png', 13, 15);
-  game.load.image('boulder', 'assets/boulder.png');
-  game.load.audio('music', 'assets/music.mp3');
+  game.load.spritesheet('ninja', 'assets/sprites/ninja.png', 13, 15);
+  game.load.image('boulder', 'assets/sprites/boulder.png');
+  game.load.audio('music', 'assets/audio/music.mp3');
+  game.load.audio('death', 'assets/audio/death.mp3');
 }
 
 var player;
@@ -17,8 +18,10 @@ var bestScore = 0;
 var startTime = 0;
 var lifeText;
 var deaths = 0;
+var replayTimer = 0; 
 var scoreText;
 var music;
+var deathSfx;
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -47,11 +50,13 @@ function create() {
   player.smoothed = false;
 
   // game text
-  lifeText = game.add.text(30, 30, deaths + ' deaths', {font: '30px Helvetica', fill: '#000000', align: 'left'});
-  scoreText = game.add.text(30, 60, '', {font: '30px Helvetica', fill: '#000000', align: 'left'});
+  lifeText = game.add.text(20, 20, deaths + ' deaths', {font: '20px Helvetica', fill: '#000000', align: 'left'});
+  scoreText = game.add.text(20, 40, '', {font: '20px Helvetica', fill: '#000000', align: 'left'});
 
-  // music
+  // audio
   music = game.add.audio('music');
+  deathSfx = game.add.audio('death');
+  deathSfx.volume = 0.2;
   music.play();
 
   // buttons
@@ -92,7 +97,7 @@ function update() {
   }
 
   //set score
-  score = game.time.now - startTime;
+  score = (game.time.now - startTime) / 1000;
   scoreText.text = 'time: ' + score;
 
   game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
@@ -108,13 +113,17 @@ function generateBoulder() {
 }
 
 function boulderHitsPlayer() {
-  deaths++;
-  if (score > bestScore) {
-    bestScore = score;
+  if (game.time.now > replayTimer) {
+    deaths++;
+    if (score > bestScore) {
+      bestScore = score;
+    }
+    score = 0;
+    startTime = game.time.now;
+    deathSfx.play();
+    replayTimer = game.time.now + 500;
+    lifeText.text = deaths + ' deaths. best time: ' + bestScore;
   }
-  score = 0;
-  startTime = game.time.now;
-  lifeText.text = deaths + ' deaths. best time: ' + bestScore;
 }
 
 function render() {}
