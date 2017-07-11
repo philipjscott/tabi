@@ -13,7 +13,6 @@ function preload() {
   game.stage.disableVisibilityChange = true;
 }
 
-var multi = false;
 var player;
 var rival;
 var boulders;
@@ -29,15 +28,18 @@ var replayTimer = 0;
 var scoreText;
 var music;
 var deathSfx;
-var ready = false;
+var createDone = false;
+var enemyIds = [];
+var enemies = {};
+
+socketInit();
 
 function create() {
   game.physics.startSystem(Phaser.Physics.ARCADE);
   game.physics.arcade.gravity.y = 300;
   game.stage.backgroundColor = '#ffffff';
 
-  // add srpites
-  rival = game.add.sprite(300, 430, 'rival');
+  // add sprites
   player = game.add.sprite(300, 430, 'ninja');
   boulders = game.add.group();
 
@@ -58,16 +60,6 @@ function create() {
   player.scale.setTo(3, 3);
   player.smoothed = false;
 
-  // rival config
-  game.physics.enable(rival, Phaser.Physics.ARCADE);
-  rival.body.collideWorldBounds = true;
-  rival.animations.add('right', [0,1,2,3,4], 10, true);
-  rival.animations.add('left', [5,6,7,8,9], 10, true);
-  rival.animations.add('idleRight', [10, 11], 1, true);
-  rival.animations.add('idleLeft', [12, 13], 1, true);
-  rival.scale.setTo(3, 3);
-  rival.smoothed = false;
-
   // game text
   lifeText = game.add.text(20, 20, deaths + ' deaths', {font: '20px Helvetica', fill: '#000000', align: 'left'});
   scoreText = game.add.text(20, 40, '', {font: '20px Helvetica', fill: '#000000', align: 'left'});
@@ -82,51 +74,58 @@ function create() {
   cursors = game.input.keyboard.createCursorKeys();
   jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
-  ready = true;
+  createDone = true;
+  gameReady();
 }
 
 function update() {
-  player.body.velocity.x = 0;
+  if (socket.id !== undefined) {
+    player.body.velocity.x = 0;
 
-  // jumping
-  if (jumpButton.isDown &&
-      player.body.onFloor()) {
-    player.body.velocity.y = -200;
-  }
-
-  // left / right controls
-  if (cursors.left.isDown) {
-    facing = 'left';
-    player.animations.play('left');
-    player.body.velocity.x = -200;
-  } 
-  else if (cursors.right.isDown) {
-    facing = 'right';
-    player.animations.play('right');
-    player.body.velocity.x = 200;
-  } else {
-    if (facing === 'left') {
-      player.animations.play('idleLeft');
-    } else {
-      player.animations.play('idleRight');
+    // jumping
+    if (jumpButton.isDown &&
+        player.body.onFloor()) {
+      player.body.velocity.y = -200;
     }
-  }
 
-  // set score
-  score = (game.time.now - startTime) / 1000;
-  scoreText.text = 'time: ' + score;
-  // multiplayer handler
-  if (multi) {
-    var myData = {x: player.body.x, y: player.body.y};
-    //console.log(myData);
+    // left / right controls
+    if (cursors.left.isDown) {
+      facing = 'left';
+      player.animations.play('left');
+      player.body.velocity.x = -200;
+    } 
+    else if (cursors.right.isDown) {
+      facing = 'right';
+      player.animations.play('right');
+      player.body.velocity.x = 200;
+    } else {
+      if (facing === 'left') {
+        player.animations.play('idleLeft');
+      } else {
+        player.animations.play('idleRight');
+      }
+    }
+
+    // set score
+    score = (game.time.now - startTime) / 1000;
+    scoreText.text = 'time: ' + score;
+   
+    // multiplayer handler
+    var myData = {
+      id: socket.id, 
+      x: player.body.x, 
+      y: player.body.y
+    };
     socket.emit('update server', myData);
     socket.on('update client', function(data) {
-      rival.position.x = data.x;
-      rival.position.y = data.y;
+      if (enemies[data.id]) {
+        enemies[data.id].position.x = data.x;
+        enemies[data.id].position.y = data.y;
+      }
     });
-  }
 
-  game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
+    game.physics.arcade.overlap(boulders, player, boulderHitsPlayer, null, this);
+  }
 }
 
 function generateBoulder(x, velocity, angularVelocity) {
@@ -153,16 +152,49 @@ function boulderHitsPlayer() {
 
 function render() {}
 
-// toggle multiplayer on connection
-socket.on('player connect', function() {
-  console.log('multi ON');
-  multi = true;
-});
 
-socket.on('create boulder', function(data) {
-  if (ready) {
-    generateBoulder(data.x, data.velocity, data.angularVelocity);
+
+function socketInit() {
+  socket.on('load players', function(ids) {
+    loadIds(ids);
+  });
+}
+function gameReady() {
+  console.log('game ready');
+  generatePlayers();
+  socket.on('player connect', function(id) {
+    console.log('connect: ' + id);
+    generatePlayer(id);
+  });
+  socket.on('create boulder', function(data) {
+    if (createDone && socket.id !== undefined) {
+      generateBoulder(data.x, data.velocity, data.angularVelocity);
+    }
+  });
+  socket.on('player disconnect', function(id) {
+    console.log('disconnect: ' + id);
+    enemies[id].destroy();
+    delete enemies[id];
+  });
+}
+function loadIds(ids) {
+  console.log('all ids : ' + ids);
+  enemyIds = ids;
+}
+function generatePlayers() {
+  for (var i = 0; i < enemyIds.length; i++) {
+    // server sends full list of ids, including own client
+    if (enemyIds[i] !== socket.id) {
+      generatePlayer(enemyIds[i]);
+    }
   }
-});
-
-
+}
+function generatePlayer(id) {
+  enemies[id] = game.add.sprite(300, 400, 'rival');
+  enemies[id].animations.add('right', [0,1,2,3,4], 10, true);
+  enemies[id].animations.add('left', [5,6,7,8,9], 10, true);
+  enemies[id].animations.add('idleRight', [10, 11], 1, true);
+  enemies[id].animations.add('idleLeft', [12, 13], 1, true);
+  enemies[id].scale.setTo(3, 3);
+  enemies[id].smoothed = false;
+}

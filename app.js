@@ -1,10 +1,8 @@
 // server init
-
 var express = require('express');
 var app = express();
 var http = require('http');
 var server = http.createServer(app);
-var io = require('socket.io')(server);
 var active = false;
 
 app.get('/', function(req, res) {
@@ -32,6 +30,8 @@ server.listen(port, function() {
 var BOULDER_TIME_INIT = 3000;
 var boulderTime = BOULDER_TIME_INIT;
 var boulderTimer;
+var io = require('socket.io')(server);
+var playerIds = [];
 
 function Boulder() {
   this.x = Math.random() * 600 / 5;
@@ -57,12 +57,28 @@ setInterval(function() {
 */
 
 io.on('connection', function(socket) {
-  socket.emit('player connect');
+  // new client loads other plays via ids
+  socket.join(socket.id);
+  playerIds.push(socket.id);
+  io.sockets.in(socket.id).emit('load players', playerIds);
+
+  console.log(playerIds);
+ 
+  // inform clients of new player
+  socket.broadcast.emit('player connect', socket.id);
+
+  // data pushed to server gets relayed to clients
   socket.on('update server', function(data) {
     socket.broadcast.emit('update client', data);
   });
   socket.on('all dead', function() {
     boulderTime = BOULDER_TIME_INIT;
+  });
+
+  // tell other clients of a disconnect, and remove from array
+  socket.on('disconnect', function() {
+    socket.broadcast.emit('player disconnect', socket.id);
+    playerIds.splice(playerIds.indexOf(socket.id), 1);
   });
 });
 
