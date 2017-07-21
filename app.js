@@ -47,14 +47,14 @@ function setBoulderTimer() {
 
 boulderTimer = setBoulderTimer();
 
-/* logic for speeding up
+/* logic for speeding up */
 setInterval(function() {
   boulderTime = Math.round(boulderTime / 1.2);
   console.log('speed up!');
   clearInterval(boulderTimer);
   boulderTimer = setBoulderTimer()
 }, 10000);
-*/
+/* */
 
 io.on('connection', function(socket) {
   // new client loads other plays via ids
