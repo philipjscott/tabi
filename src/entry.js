@@ -1,13 +1,23 @@
+import 'pixi';
+import 'p2';
+import io from 'socket.io-client';
+import Phaser from 'phaser';
+import gameMusic from './assets/audio/music.mp3';
+import deathSound from './assets/audio/death.mp3';
+import playerSprite from './assets/sprites/ninja.png';
+import rivalSprite from './assets/sprites/rival.png';
+import boulderSprite from './assets/sprites/boulder.png';
+
 var socket = io();
 
 var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', {preload : preload, create: create, update: update, render: render });
 
 function preload() {
-  game.load.spritesheet('ninja', 'assets/sprites/ninja.png', 13, 15);
-  game.load.spritesheet('rival', 'assets/sprites/rival.png', 13, 15);
-  game.load.image('boulder', 'assets/sprites/boulder.png');
-  game.load.audio('music', 'assets/audio/music.mp3');
-  game.load.audio('death', 'assets/audio/death.mp3');
+  game.load.spritesheet('ninja', playerSprite, 13, 15);
+  game.load.spritesheet('rival', rivalSprite, 13, 15);
+  game.load.image('boulder', boulderSprite);
+  game.load.audio('music', gameMusic);
+  game.load.audio('death', deathSound);
 
   // make the game continue to run on lose focus
   game.stage.disableVisibilityChange = true;
