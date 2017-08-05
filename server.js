@@ -1,16 +1,26 @@
-// server init
-var express = require('express');
-var app = express();
-var http = require('http');
-var server = http.createServer(app);
-var active = false;
+const optional = require('optional');
+const express = require('express');
+const app = express();
+const http = require('http');
+const server = http.createServer(app);
+
+const webpack = optional('webpack');
+const webpackDevMiddleware = optional('webpack-dev-middleware');
+const webpackHotMiddleware = optional('webpack-hot-middleware');
+
+const WEBSERVER_PORT = process.env.PORT || 8080;
+const PRODUCTION = process.env.PORT;
+
+let active = false;
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-
-app.use(express.static('public'));
+if (PRODUCTION) {
+  app.use(express.static('dist'));
+} else {
+  
 
 setInterval(function() {
   if (active) {
