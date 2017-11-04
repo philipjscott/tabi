@@ -67,13 +67,13 @@ function setBoulderTimer() {
 
 boulderTimer = setBoulderTimer();
 
-/* logic for speeding up 
+/* logic for speeding up */
 setInterval(function() {
   boulderTime = Math.round(boulderTime / 1.2);
   console.log('speed up!');
   clearInterval(boulderTimer);
   boulderTimer = setBoulderTimer()
-}, 5000);*/
+}, 5000);
 
 
 io.on('connection', function(socket) {
