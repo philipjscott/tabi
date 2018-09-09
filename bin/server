@@ -8,9 +8,13 @@ const app = require('../app')
 const gamify = require('../gamify')
 const http = require('http')
 const server = http.createServer(app)
-const io = require('socket.io')(server)
+//const io = require('socket.io')(server)
+const colyseus = require('colyseus')
+const gameServer = new colyseus.Server({server})
 
-gamify(io)
+gameServer.register('tabi', require('./room.js'))
+
+//gamify(io)
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`)

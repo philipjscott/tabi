@@ -6,6 +6,10 @@ import deathSound from './assets/audio/death.mp3'
 import playerSprite from './assets/sprites/ninja.png'
 import rivalSprite from './assets/sprites/rival.png'
 import boulderSprite from './assets/sprites/boulder.png'
+import * as Colyseus from 'colyseus.js'
+
+const client = new Colyseus.Client('ws://localhost:8080')
+const room = client.join('tabi')
 
 var socket = io()
 
