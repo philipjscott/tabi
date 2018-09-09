@@ -5,8 +5,8 @@
   "description": "Dodge boulders! :o",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "node ./bin/server",
+    "dev": "nodemon ./bin/server",
     "build": "parcel build ./client/index.html --public-url /static --out-dir static",
     "fix": "standard --fix",
     "lint": "standard"
