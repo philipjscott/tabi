@@ -1,36 +1,19 @@
-const optional = require('optional');
 const express = require('express');
 const app = express();
 const router = express.Router();
 const http = require('http');
 const server = http.createServer(app);
+const path = require('path')
 
-const config = require('./config/webpack.dev.config');
-const webpack = optional('webpack');
-const webpackDevMiddleware = optional('webpack-dev-middleware');
-const webpackHotMiddleware = optional('webpack-hot-middleware');
-const compiler = webpack(config);
-
-const WEBSERVER_PORT = process.env.PORT || 8080;
 const PRODUCTION = process.env.PORT;
 
 let active = false;
 
 router.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(path.join(__dirname, 'static/index.html'));
 });
 app.use(router);
-if (PRODUCTION) {
-  app.use(express.static('dist'));
-} else {
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath,
-    stats: {colors: true}
-  }));
-  app.use(webpackHotMiddleware(compiler, {
-    log: console.log
-  }));
-}
+app.use('/static', express.static(path.join(__dirname, 'static')));
 
 setInterval(function() {
   if (active) {
@@ -101,4 +84,3 @@ io.on('connection', function(socket) {
     playerIds.splice(playerIds.indexOf(socket.id), 1);
   });
 });
-

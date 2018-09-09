@@ -1,7 +1,4 @@
-import 'pixi';
-import 'p2';
 import io from 'socket.io-client';
-import Phaser from 'phaser';
 import gameMusic from './assets/audio/music.mp3';
 import deathSound from './assets/audio/death.mp3';
 import playerSprite from './assets/sprites/ninja.png';
