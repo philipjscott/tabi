@@ -1,6 +1,6 @@
 /* global Phaser */
 
-import * as Colyseus from 'colyeus.js'
+import * as Colyseus from 'colyseus.js'
 import gameMusic from './assets/audio/music.mp3'
 import deathSound from './assets/audio/death.mp3'
 import playerSprite from './assets/sprites/ninja.png'
@@ -15,7 +15,6 @@ const room = client.join('tabi')
 
 room.listen('players/:id', (change) => view.updatePlayer(change))
 room.listen('players/:id/:attribute', (change) => view.updatePosition)
-
 
 var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render })
 
