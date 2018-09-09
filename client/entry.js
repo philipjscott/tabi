@@ -1,13 +1,21 @@
 /* global Phaser */
 
-import io from 'socket.io-client'
+import * as Colyseus from 'colyeus.js'
 import gameMusic from './assets/audio/music.mp3'
 import deathSound from './assets/audio/death.mp3'
 import playerSprite from './assets/sprites/ninja.png'
 import rivalSprite from './assets/sprites/rival.png'
 import boulderSprite from './assets/sprites/boulder.png'
 
-var socket = io()
+const wsUrl = window.location.port
+  ? `ws://${window.location.host}:${window.location.port}`
+  : `ws://${window.location.host}`
+const client = new Colyseus.Client(wsUrl)
+const room = client.join('tabi')
+
+room.listen('players/:id', (change) => view.updatePlayer(change))
+room.listen('players/:id/:attribute', (change) => view.updatePosition)
+
 
 var game = new Phaser.Game(600, 450, Phaser.AUTO, 'game', { preload: preload, create: create, update: update, render: render })
 
