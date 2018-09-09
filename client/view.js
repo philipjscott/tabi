@@ -2,7 +2,7 @@
 
 import * as PIXI from 'pixi.js'
 import * as assets from './assets'
-import { cosineInterp } from './interp'
+import { lerp } from 'interpolation'
 
 class View {
   constructor () {
@@ -21,8 +21,8 @@ class View {
         const sprite = this._sprites[id]
         const position = this._positions[id]
 
-        sprite.x = cosineInterp(sprite.x, position.x, delta / lerpRate)
-        sprite.y = cosineInterp(sprite.y, position.y, delta / lerpRate)
+        sprite.x = lerp(sprite.x, position.x, delta / lerpRate)
+        sprite.y = lerp(sprite.y, position.y, delta / lerpRate)
       }
     })
   }

@@ -2699,6 +2699,13 @@ inquirer@^5.2.0:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
+interpolation@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/interpolation/-/interpolation-1.0.0.tgz#01290b210ffdd2674c8983503932332b7fd6dff7"
+  dependencies:
+    lerp "^1.0.0"
+    smoothstep "^1.0.0"
+
 invariant@^2.2.2:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
@@ -3086,6 +3093,10 @@ latest-version@^3.0.0:
   resolved "https://registry.yarnpkg.com/latest-version/-/latest-version-3.1.0.tgz#a205383fea322b33b5ae3b18abee0dc2f356ee15"
   dependencies:
     package-json "^4.0.0"
+
+lerp@^1.0.0:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/lerp/-/lerp-1.0.3.tgz#a18c8968f917896de15ccfcc28d55a6b731e776e"
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -4912,6 +4923,10 @@ slice-ansi@1.0.0:
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-1.0.0.tgz#044f1a49d8842ff307aad6b505ed178bd950134d"
   dependencies:
     is-fullwidth-code-point "^2.0.0"
+
+smoothstep@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/smoothstep/-/smoothstep-1.0.1.tgz#7ad03f32302fe6497822d7aa6dd47aa718fe5623"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
