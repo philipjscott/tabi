@@ -11,6 +11,7 @@ class View {
     this._positions = {}
 
     document.body.appendChild(this._app.view)
+    PIXI.sound.Sound.from(assets.music).play()
     this._renderLoop()
   }
 
