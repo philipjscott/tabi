@@ -1,12 +1,13 @@
 'use strict'
 
 import * as PIXI from 'pixi.js'
+import sprite from './assets/sprites/ninja.png'
 
 const app = new PIXI.Application(800, 600, { backgroundColor: 0x1099bb })
 document.body.appendChild(app.view)
 
 // create a new Sprite from an image path
-const bunny = PIXI.Sprite.fromImage('required/assets/basics/bunny.png')
+const bunny = PIXI.Sprite.fromImage(sprite)
 
 // center the sprite's anchor point
 bunny.anchor.set(0.5)
