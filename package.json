@@ -1,29 +1,26 @@
 {
   "name": "tabi",
   "version": "1.0.0",
-  "description": "",
+  "author": "Philip Scott <pscott@zeptohost.com>",
+  "description": "Dodge boulders! :o",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "nodemon server.js",
+    "dev": "nodemon server.js",
+    "build": "parcel build ./client/index.html --public-url /static --out-dir static",
     "fix": "standard --fix",
     "lint": "standard"
   },
-  "author": "",
   "license": "MIT",
   "dependencies": {
-    "expose-loader": "^0.7.3",
     "express": "^4.15.3",
-    "file-loader": "^0.11.2",
-    "optional": "^0.1.4",
-    "phaser-ce": "^2.8.3",
     "shortid": "^2.2.8",
-    "socket.io": "^2.0.3",
-    "webpack": "^3.4.1",
-    "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.18.2"
+    "socket.io": "^2.0.3"
   },
   "devDependencies": {
+    "nodemon": "^1.18.4",
+    "parcel-bundler": "^1.9.7",
+    "socket.io-client": "^2.1.1",
     "standard": "^12.0.1"
   }
 }
