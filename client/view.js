@@ -24,6 +24,7 @@ class View {
 
         sprite.x = lerp(sprite.x, position.x, delta / lerpRate)
         sprite.y = lerp(sprite.y, position.y, delta / lerpRate)
+        sprite.theta = lerp(sprite.theta, position.theta, delta / lerpRate)
       }
     })
   }
@@ -31,9 +32,9 @@ class View {
   _createPlayer (id, position) {
     const sprite = PIXI.Sprite.fromImage(assets.sprite)
 
-    // skip lerp when initializing position
     sprite.x = position.x
     sprite.y = position.y
+    sprite.theta = position.theta
 
     this._positions[id] = position
     this._sprites[id] = sprite

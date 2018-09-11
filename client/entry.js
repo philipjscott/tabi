@@ -20,5 +20,5 @@ const keymap = {
 }
 
 controller.register(keymap)
-room.listen('players/:id', (change) => view.updatePlayer(change))
-room.listen('players/:id/:attribute', (change) => view.updatePosition)
+room.listen('players/:id', change => view.updatePlayer(change))
+room.listen('players/:id/:attribute', change => view.updatePosition(change))
