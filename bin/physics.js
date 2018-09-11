@@ -16,7 +16,7 @@ class Simulation {
   }
 
   addPlayer (sessionId) {
-    this.players[sessionId] = Bodies.rectangle(100, 200, 50, 80, { inertia: Infinity })
+    this.players[sessionId] = Bodies.rectangle(100, 200, 50, 80)
     World.add(this.engine.world, [this.players[sessionId]])
   }
 
@@ -26,7 +26,6 @@ class Simulation {
   }
 
   updatePlayer (player, moveset) {
-    console.log(moveset)
     if (moveset.left) {
       Body.setVelocity(player, { x: -3, y: player.velocity.y })
     }
@@ -46,6 +45,7 @@ class Simulation {
       const players = this.players
       this.colyseusPlayers[sessionId].x = players[sessionId].position.x
       this.colyseusPlayers[sessionId].y = players[sessionId].position.y
+      this.colyseusPlayers[sessionId].theta = players[sessionId].angle
       // console.log(this.colyseusPlayers[sessionId].x, this.colyseusPlayers[sessionId].y);
     }
     Engine.update(this.engine)

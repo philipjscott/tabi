@@ -22,7 +22,7 @@ class View {
   _renderLoop () {
     this._app.ticker.add((delta) => {
       for (const id in this._positions) {
-        const lerpRate = 5
+        const lerpRate = 4
         const sprite = this._sprites[id]
         const position = this._positions[id]
 
