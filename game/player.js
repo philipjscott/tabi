@@ -3,6 +3,7 @@ class Player {
     this.x = x
     this.y = y
     this.facing = direction
+    this.theta = 0
   }
 }
 

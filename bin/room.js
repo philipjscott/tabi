@@ -18,6 +18,7 @@ class TabiRoom extends Room {
   // When client successfully join the room
   onJoin (client) {
     this.state.players[client.sessionId] = new Player(0, 0, 'right')
+
     console.log(`Player ${client.sessionId} has joined the session!`)
   }
 
