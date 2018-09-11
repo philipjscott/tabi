@@ -33,8 +33,8 @@ class View {
     })
   }
 
-  _createPlayer (id, position) {
-    const sprite = PIXI.Sprite.fromImage(assets.sprite)
+  _createSprite (id, position, asset) {
+    const sprite = PIXI.Sprite.fromImage(asset)
 
     sprite.x = position.x
     sprite.y = position.y
@@ -46,7 +46,7 @@ class View {
     this._app.stage.addChild(sprite)
   }
 
-  _removePlayer (id) {
+  _removeSprite (id) {
     this._sprites[id].destroy()
     delete this._sprites[id]
     delete this._positions[id]
@@ -59,10 +59,20 @@ class View {
   updatePlayer (change) {
     switch (change.operation) {
       case 'add':
-        this._createPlayer(change.path.id, change.value)
+        this._createSprite(change.path.id, change.value, assets.sprite)
         break
       case 'remove':
-        this._removePlayer(change.path.id)
+        this._removeSprite(change.path.id)
+    }
+  }
+
+  updateBoulder (change) {
+    switch (change.operation) {
+      case 'add':
+        this._createSprite(change.path.id, change.value, assets.boulder)
+        break
+      case 'remove':
+        this._removeSprite(change.path.id)
     }
   }
 
