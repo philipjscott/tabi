@@ -28,7 +28,7 @@ class View {
 
         sprite.x = lerp(sprite.x, position.x, delta / lerpRate)
         sprite.y = lerp(sprite.y, position.y, delta / lerpRate)
-        sprite.theta = lerp(sprite.theta, position.theta, delta / lerpRate)
+        sprite.rotation = lerp(sprite.rotation, position.theta, delta / lerpRate)
       }
     })
   }
