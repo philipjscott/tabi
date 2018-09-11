@@ -19,4 +19,6 @@ const keymap = {
 
 controller.register(keymap)
 room.listen('players/:id', change => view.updatePlayer(change))
+room.listen('boulders/:id', change => view.updateBoulder(change))
 room.listen('players/:id/:attribute', change => view.updatePosition(change))
+room.listen('boulders/:id/:attribute', change => view.updatePosition(change))
