@@ -5,9 +5,7 @@ import View from './view'
 import virtuals from './virtuals'
 import * as Colyseus from 'colyseus.js'
 
-const wsUrl = window.location.port
-  ? `ws://${window.location.host}:${window.location.port}`
-  : `ws://${window.location.host}`
+const wsUrl = `ws://${window.location.host}`
 const client = new Colyseus.Client(wsUrl)
 const room = client.join('tabi')
 
