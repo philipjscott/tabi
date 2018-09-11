@@ -8,7 +8,6 @@ movements.forEach((key) => {
     keydown (transmitter) {
       let data = {}
       data[key] = true
-
       transmitter.send(data)
     },
     keyup (transmitter) {

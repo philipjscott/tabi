@@ -53,7 +53,6 @@ function gamify (io) {
       playerIds.splice(playerIds.indexOf(socket.id), 1)
     })
   })
-
 }
 
 module.exports = gamify

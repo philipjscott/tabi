@@ -1,4 +1,4 @@
-const { Engine, World, Bodies, Body, Events } = require('matter-js')
+const { Engine, World, Bodies, Body } = require('matter-js')
 
 class Simulation {
   constructor (colyseusPlayers, playerMoveSets) {
@@ -11,39 +11,42 @@ class Simulation {
     World.add(this.engine.world, [ground])
     Engine.run(this.engine)
     setInterval(() => {
-      this.gameLoop()
+      this.gameLoop(playerMoveSets)
     }, 31.25)
   }
 
-  addPlayer(sessionId){
-    this.players[sessionId] = Bodies.rectangle(100, 200, 50, 80, { inertia: Infinity})
+  addPlayer (sessionId) {
+    this.players[sessionId] = Bodies.rectangle(100, 200, 50, 80, { inertia: Infinity })
+    World.add(this.engine.world, [this.players[sessionId]])
   }
 
-  removePlayer(sessionId){
+  removePlayer (sessionId) {
     delete this.players[sessionId]
+    // Add player removed from world
   }
 
-  updatePlayer(player, moveset){
-    if(moveset.left){
-
+  updatePlayer (player, moveset) {
+    console.log(moveset)
+    if (moveset.left) {
+      Body.setVelocity(player, { x: -3, y: player.velocity.y })
     }
-    if (moveset.right){
-
+    if (moveset.right) {
+      Body.setVelocity(player, { x: 3, y: player.velocity.y })
     }
-    if (moveset.jump){
-
+    if (moveset.jump) {
+      Body.setVelocity(player, { x: player.velocity.x, y: -10 })
     }
   }
 
   gameLoop (playerMoveSets) {
-    for (player in playerMoveSets) {
-      updatePlayer(player, playerMoveSets[player])
+    for (const player in playerMoveSets) {
+      this.updatePlayer(this.players[player], playerMoveSets[player])
     }
     for (const sessionId in this.players) {
       const players = this.players
       this.colyseusPlayers[sessionId].x = players[sessionId].position.x
       this.colyseusPlayers[sessionId].y = players[sessionId].position.y
-      //console.log(this.colyseusPlayers[sessionId].x, this.colyseusPlayers[sessionId].y);
+      // console.log(this.colyseusPlayers[sessionId].x, this.colyseusPlayers[sessionId].y);
     }
     Engine.update(this.engine)
   }

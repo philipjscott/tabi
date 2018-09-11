@@ -1,7 +1,7 @@
 const { Room } = require('colyseus')
 const Player = require('../game/player.js')
 const BoulderManager = require('./boulder')
-const Simulation = require("./physics")
+const Simulation = require('./physics')
 
 class TabiRoom extends Room {
   // When room is initialized
@@ -11,7 +11,7 @@ class TabiRoom extends Room {
       boulders: {}
     })
     this.playerMoveSets = {}
-    this.simulation = new Simulation(this.state.players, this.state.playerMoveSets)
+    this.simulation = new Simulation(this.state.players, this.playerMoveSets)
     const boulder = new BoulderManager()
     boulder.DifficultyIncrementor()
     boulder.BoulderSpawner(this.state)
@@ -20,7 +20,7 @@ class TabiRoom extends Room {
   // When client successfully join the room
   onJoin (client) {
     this.state.players[client.sessionId] = new Player(0, 0, 'right')
-    this.playerMoveSets[client.sessionId] = {left: false, right: false, jump: false}
+    this.playerMoveSets[client.sessionId] = { left: false, right: false, jump: false }
     this.simulation.addPlayer(client.sessionId)
     console.log(`Player ${client.sessionId} has joined the session!`)
   }
@@ -35,9 +35,7 @@ class TabiRoom extends Room {
 
   // When a client sends a message
   onMessage (client, data) {
-    // const player = this.state.players[client.sessionId]
-
-    switch (data.move) {
+    switch (Object.keys(data)[0]) {
       case 'left':
         console.log(`Player ${client.sessionId} has moved right`)
         this.playerMoveSets[client.sessionId].left = data.left
