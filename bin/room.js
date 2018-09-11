@@ -10,6 +10,7 @@ class TabiRoom extends Room {
       boulders: {}
     })
 
+    this.playerMoveSets = {}
     const boulder = new BoulderManager()
     boulder.DifficultyIncrementor()
     boulder.BoulderSpawner(this.state)
@@ -18,13 +19,14 @@ class TabiRoom extends Room {
   // When client successfully join the room
   onJoin (client) {
     this.state.players[client.sessionId] = new Player(0, 0, 'right')
-
+    this.playerMoveSets[client.sessionId] = {left: false, right: false, jump: false}
     console.log(`Player ${client.sessionId} has joined the session!`)
   }
 
   // When a client leaves the room
   onLeave (client) {
     delete this.state.players[client.sessionId]
+    delete this.playerMoveSets[client.sessionId]
     console.log(`Player ${client.sessionId} has left the session!`)
   }
 
@@ -34,13 +36,16 @@ class TabiRoom extends Room {
 
     switch (data.move) {
       case 'left':
-        console.log(`Player ${client.sessionId} has moved left`)
+        console.log(`Player ${client.sessionId} has moved right`)
+        this.playerMoveSets[client.sessionId].left = data.left
         break
       case 'right':
         console.log(`Player ${client.sessionId} has moved right`)
+        this.playerMoveSets[client.sessionId].right = data.right
         break
       case 'jump':
         console.log(`Player ${client.sessionId} has jumped!`)
+        this.playerMoveSets[client.sessionId].jump = data.jump
     }
   }
 

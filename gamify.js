@@ -27,7 +27,7 @@ function gamify (io) {
     clearInterval(boulderTimer)
     boulderTimer = setBoulderTimer()
   }, 5000)
-  /*
+
   io.on('connection', function (socket) {
     // new client loads other plays via ids
     socket.join(socket.id)
@@ -53,7 +53,7 @@ function gamify (io) {
       playerIds.splice(playerIds.indexOf(socket.id), 1)
     })
   })
-  */
+
 }
 
 module.exports = gamify

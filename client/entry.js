@@ -3,7 +3,7 @@
 import Controller from 'key-controller'
 import View from './view'
 import virtuals from './virtuals'
-import * as Colyseus from 'colyeus.js'
+import * as Colyseus from 'colyseus.js'
 
 const wsUrl = window.location.port
   ? `ws://${window.location.host}:${window.location.port}`
