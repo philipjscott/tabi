@@ -13,9 +13,12 @@
   },
   "license": "MIT",
   "dependencies": {
+    "colyseus": "^0.9.15",
     "express": "^4.15.3",
+    "matter-js": "^0.14.2",
     "shortid": "^2.2.8",
-    "socket.io": "^2.0.3"
+    "socket.io": "^2.0.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "colyseus.js": "^0.9.14",
