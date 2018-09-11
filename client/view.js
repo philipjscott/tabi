@@ -3,6 +3,8 @@
 import * as PIXI from 'pixi.js'
 import * as assets from './assets'
 import { lerp } from 'interpolation'
+import play from 'audio-play'
+import load from 'audio-loader'
 
 class View {
   constructor () {
@@ -11,7 +13,9 @@ class View {
     this._positions = {}
 
     document.body.appendChild(this._app.view)
-    PIXI.sound.Sound.from(assets.music).play()
+    load(assets.music).then(buffer => play(buffer, {
+      volume: 0.1
+    }))
     this._renderLoop()
   }
 
@@ -55,7 +59,7 @@ class View {
   updatePlayer (change) {
     switch (change.operation) {
       case 'add':
-        this._createPlayer(change.path.id, change.value.position)
+        this._createPlayer(change.path.id, change.value)
         break
       case 'remove':
         this._removePlayer(change.path.id)
