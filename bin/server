@@ -6,14 +6,13 @@ const port = process.env.PORT || 8080
 
 const app = require('../app')
 const http = require('http')
-const server = http.createServer(app)
-//const io = require('socket.io')(server)
 const colyseus = require('colyseus')
-const gameServer = new colyseus.Server({server})
+const gamify = require('../game')
 
-gameServer.register('tabi', require('./room.js'))
+const server = http.createServer(app)
+const gameServer = new colyseus.Server({ server })
 
-//gamify(io)
+gamify(gameServer)
 
 server.listen(port, () => {
   console.log(`Listening on port ${port}`)

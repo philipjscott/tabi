@@ -1,18 +1,24 @@
+'use strict'
+
 const { Engine, World, Bodies, Body } = require('matter-js')
+const { physicsFPS } = require('../config')
+const buildmap = require('./buildmap')
+
+global.window = {}
 
 class Simulation {
-  constructor (colyseusPlayers, playerMoveSets) {
-    global.window = {}
+  constructor (colyseusState, playerMoveSets) {
     this.engine = Engine.create()
-    this.colyseusPlayers = colyseusPlayers
-    this.players = {}
-    const ground = Bodies.rectangle(400, 610, 810, 60, { isStatic: true, frictionStatic: 0, friction: 0.04, label: 'ground' })
-    this.engine.world.gravity.y = 1
-    World.add(this.engine.world, [ground])
+    this.colyseusState = colyseusState
+    this.playerBodies = {}
+    this.boulderBodies = {}
+
+    buildmap(this.engine)
     Engine.run(this.engine)
+
     setInterval(() => {
       this.gameLoop(playerMoveSets)
-    }, 31.25)
+    }, 1000 / physicsFPS)
   }
 
   addPlayer (sessionId) {

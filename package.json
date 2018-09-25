@@ -2,6 +2,9 @@
   "name": "tabi",
   "version": "1.0.0",
   "author": "Philip Scott <pscott@zeptohost.com>",
+  "contributors": [
+    "Philip Scott <pscott@zeptohost.com>"
+  ],
   "description": "Dodge boulders! :o",
   "main": "server.js",
   "scripts": {
