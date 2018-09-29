@@ -16,7 +16,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@colyseus/monitor": "^0.1.10",
     "colyseus": "^0.9.15",
+    "cors": "^2.8.4",
     "express": "^4.15.3",
     "matter-js": "^0.14.2",
     "shortid": "^2.2.8",

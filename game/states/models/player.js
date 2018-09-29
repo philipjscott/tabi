@@ -1,8 +1,11 @@
+'use strict'
+
 class Player {
-  constructor (x, y, direction) {
+  constructor (x, y) {
     this.x = x
     this.y = y
-    this.facing = direction
+    this.facing = 'left'
+    this.moving = false
     this.theta = 0
   }
 }
