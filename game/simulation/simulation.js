@@ -40,7 +40,7 @@ class Simulation {
 
   removePlayer (sessionId) {
     delete this.playerBodies[sessionId]
-    delete this.playerMoveSets[sessionId]
+    delete this.playerMovesets[sessionId]
     this.colyseusState.removePlayer(sessionId)
   }
 
@@ -80,11 +80,11 @@ class Simulation {
   }
 
   _tick () {
+    Engine.update(this.engine)
+
     for (const id in this.colyseusState.players) {
       this._updatePlayer(id)
     }
-
-    Engine.update(this.engine)
   }
 }
 

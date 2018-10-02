@@ -1,8 +1,8 @@
 'use strict'
 
 const { Room } = require('colyseus')
-const Simulation = require('../physics')
-const TabiState = require('../state/tabi')
+const Simulation = require('../simulation')
+const TabiState = require('../states/tabi')
 
 class TabiRoom extends Room {
   onInit () {
@@ -25,7 +25,7 @@ class TabiRoom extends Room {
   onMessage (client, message) {
     this.simulation.movePlayer(client.sessionId, message)
 
-    console.log(`Player ${client.sessionId} has moved ${message.action}`)
+    console.log(`Player ${client.sessionId} has ${message.data ? 'started' : 'stopped'} moving ${message.action}`)
   }
 
   onDispose () {

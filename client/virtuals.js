@@ -1,20 +1,24 @@
 'use strict'
 
-const movements = ['jump', 'left', 'right']
+const movements = {
+  jump: false,
+  left: false,
+  right: false
+}
 let virtuals = {}
 
-movements.forEach((key) => {
+Object.keys(movements).forEach((key) => {
   virtuals[key] = {
     keydown (transmitter) {
-      let data = {}
-      data[key] = true
-      transmitter.send(data)
+      if (!movements[key]) {
+        transmitter.send({ action: key, data: true })
+      }
+
+      movements[key] = true
     },
     keyup (transmitter) {
-      let data = {}
-      data[key] = false
-
-      transmitter.send(data)
+      transmitter.send({ action: key, data: false })
+      movements[key] = false
     }
   }
 })

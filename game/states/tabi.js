@@ -1,6 +1,6 @@
 'use strict'
 
-const { Player, Boulder } = require('./models')
+const { Player } = require('./models')
 
 class TabiState {
   constructor () {
@@ -16,8 +16,8 @@ class TabiState {
     delete this.players[sessionId]
   }
 
-  spawnBoulder() {
-
+  getPlayer (sessionId) {
+    return this.players[sessionId]
   }
 }
 

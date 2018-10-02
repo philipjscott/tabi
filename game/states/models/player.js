@@ -7,6 +7,7 @@ class Player {
     this.facing = 'left'
     this.moving = false
     this.theta = 0
+    this.alive = true
   }
 }
 
