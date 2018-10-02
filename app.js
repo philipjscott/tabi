@@ -3,7 +3,9 @@
 const express = require('express')
 const app = express()
 const path = require('path')
+const cors = require('cors')
 
+app.use(cors())
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
 app.get('/', function (req, res) {
