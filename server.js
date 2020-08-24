@@ -49,12 +49,21 @@ function setBoulderTimer() {
 
 boulderTimer = setBoulderTimer();
 
+let diff = 0
+
 /* logic for speeding up */
 setInterval(function() {
-  boulderTime = Math.round(boulderTime / 1.2);
-  console.log('speed up!');
-  clearInterval(boulderTimer);
-  boulderTimer = setBoulderTimer()
+  diff += 1
+  if (diff < 10) {
+    boulderTime = Math.round(boulderTime / 1.2);
+    console.log('speed up!');
+    clearInterval(boulderTimer);
+    boulderTimer = setBoulderTimer()
+  } else {
+    diff = 0
+    boulderTime = BOULDER_TIME_INIT
+    boulderTimer = setBoulderTimer()
+  }
 }, 5000);
 
 
