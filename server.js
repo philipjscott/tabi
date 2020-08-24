@@ -54,7 +54,7 @@ let diff = 0
 /* logic for speeding up */
 setInterval(function() {
   diff += 1
-  if (diff < 10) {
+  if (diff < 5) {
     boulderTime = Math.round(boulderTime / 1.2);
     console.log('speed up!');
     clearInterval(boulderTimer);
