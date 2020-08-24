@@ -14,8 +14,6 @@ const compiler = webpack(config);
 const WEBSERVER_PORT = process.env.PORT || 8080;
 const PRODUCTION = process.env.PORT;
 
-let active = false;
-
 router.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
@@ -31,13 +29,6 @@ if (PRODUCTION) {
     log: console.log
   }));
 }
-
-setInterval(function() {
-  if (active) {
-    http.get('http://tabijs.herokuapp.com');
-    active = false;
-  }
-}, 1000 * 60 * 29);
 
 var port = process.env.PORT || 8080;
 server.listen(port, function() {
