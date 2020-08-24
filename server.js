@@ -62,6 +62,7 @@ setInterval(function() {
   } else {
     diff = 0
     boulderTime = BOULDER_TIME_INIT
+    clearInterval(boulderTimer);
     boulderTimer = setBoulderTimer()
   }
 }, 5000);
