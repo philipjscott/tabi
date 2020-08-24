@@ -11,31 +11,22 @@ const webpackDevMiddleware = optional('webpack-dev-middleware');
 const webpackHotMiddleware = optional('webpack-hot-middleware');
 const compiler = webpack(config);
 
-const WEBSERVER_PORT = process.env.PORT || 8080;
-const PRODUCTION = process.env.PORT;
-
 router.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 app.use(router);
-if (PRODUCTION) {
-  app.use(express.static('dist'));
-} else {
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: config.output.publicPath,
-    stats: {colors: true}
-  }));
-  app.use(webpackHotMiddleware(compiler, {
-    log: console.log
-  }));
-}
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: config.output.publicPath,
+  stats: {colors: true}
+}));
+app.use(webpackHotMiddleware(compiler, {
+  log: console.log
+}));
 
 var port = process.env.PORT || 8080;
 server.listen(port, function() {
   console.log('listening!');
 });
-
-
 
 // game logic
 var BOULDER_TIME_INIT = 3000;
